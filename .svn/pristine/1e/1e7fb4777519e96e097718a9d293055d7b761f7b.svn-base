@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasource>
+<database  id ="115" username="sry" password="sry" virtualnode="">
+  <jdbcurl>jdbc:beyondb://192.168.1.115:II7/beijingpoidb</jdbcurl>
+</database>
+<database id="2" username="sry" password="sry" virtualnode="">
+  <jdbcurl>jdbc:beyondb://192.168.1.116:II7/beijingpoidb</jdbcurl>
+</database>
+</datasource>

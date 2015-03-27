@@ -1,0 +1,891 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.beyondb.ui;
+
+import com.beyondb.datasource.BydOperator;
+import com.beyondb.datasource.DataSource;
+import com.beyondb.datasource.DataSourceUtils;
+import com.beyondb.raster.Celltype;
+import com.beyondb.raster.Compression;
+import com.beyondb.raster.Interleaving;
+import com.beyondb.raster.RasterFormat;
+import com.beyondb.raster.RasterMode;
+import com.beyondb.raster.StoreMode;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author beyondb
+ */
+public class SetRasterModePanel extends javax.swing.JPanel  {
+
+    private StoreMode m_StoreMode;
+    private String m_TableAName;
+    private BydOperator m_bydOperator;
+    /**
+     * Creates new form SetRasterModePanel
+     */
+    public SetRasterModePanel() {
+        initComponents();
+        jComboBox_Mode.setSelectedIndex(1);
+        
+        m_StoreMode = new StoreMode(); 
+
+    }
+    
+    public void  setPyramidUpLevel(int level)
+    {
+        if (level>-1) {
+            
+        m_StoreMode.pyd_level = level;
+        jSpinner_PyramidLevel.setValue(level);
+        
+        }
+    }
+    public void setRasterMode(RasterMode rasterMode) {
+     
+        if (rasterMode !=null) {
+            m_StoreMode.mode = rasterMode;
+            jComboBox_Mode.setSelectedItem(rasterMode.name());
+        }
+    }
+
+    public void setBlockSize(int width, int height, int bands) {
+        if (width > 0 && height > 0 && bands > 0) {
+
+            jSpinner_Block_W.setValue(width);
+            jSpinner_Block_H.setValue(height);
+            jSpinner_Block_B.setValue(bands);
+            StringBuilder builder = new StringBuilder();
+            builder.append("(").append(width).append(",")
+                    .append(height).append(",")
+                    .append(bands).append(")");
+            jCheckBox_Block.setSelected(true);
+            m_StoreMode.blocksize = builder.toString();
+        }else
+        {
+            jCheckBox_Block.setSelected(false);
+        }
+    }
+    
+   public void setRasterSize(int width, int height, int bands) {
+        if (width > 0 && height > 0 && bands > 0) {
+            jSpinner_RasterSize_W.setValue(width);
+            jSpinner_RasterSize_H.setValue(height);
+            jSpinner_RasterSize_B.setValue(bands);
+            StringBuilder builder = new StringBuilder();
+            builder.append("(").append(width).append(",")
+                    .append(height).append(",")
+                    .append(bands).append(")");
+
+            m_StoreMode.rastersize = builder.toString();
+        }
+    }
+        
+    public void setULCCoord(int x, int y, int z) {
+        if (x > 0 && y > 0 && z > 0) {
+            jSpinner_ULCcoord_X.setValue(x);
+            jSpinner_ULCcoord_Y.setValue(y);
+            jSpinner_ULCcoord_Z.setValue(z);
+            StringBuilder builder = new StringBuilder();
+            builder.append("(").append(x).append(",")
+                    .append(y).append(",")
+                    .append(z).append(")");
+
+            m_StoreMode.ulccoord = builder.toString();
+        }
+    }
+   
+     public void setBRPCoord(int x, int y, int z) {
+        if (x > 0 && y > 0 && z > 0) {
+            jSpinner_BRPcoord_X.setValue(x);
+            jSpinner_BRPcoord_Y.setValue(y);
+            jSpinner_BRPcoord_Z.setValue(z);
+            StringBuilder builder = new StringBuilder();
+            builder.append("(").append(x).append(",")
+                    .append(y).append(",")
+                    .append(z).append(")");
+
+            m_StoreMode.ulccoord = builder.toString();
+        }
+    }
+     
+    public void setTableAName(String tableAName) {
+        m_TableAName = tableAName;
+        this.jTextField_RAT.setText(tableAName);
+ 
+    }
+    
+    /**
+     * 自动填充B表名称
+     */
+    public String auotFileTableBName()
+    {
+        if (m_TableAName.isEmpty()) {
+            return "";
+        }
+        String ratColumnName = m_bydOperator.getRasterColumnName(m_TableAName);
+        if (ratColumnName.isEmpty()) {
+            return "";
+        }
+        //检查是否有B表
+        String rbt = m_bydOperator.readRasterDataLocation(m_TableAName, ratColumnName);
+        if (!rbt.isEmpty()) {
+            setTableBName(rbt);
+        }
+        return rbt;
+    }
+   
+    
+    public void setTableBName(String tableBName) {
+        m_StoreMode.tableBName = tableBName;
+        this.jTextField_rbt.setText(tableBName);
+    }
+
+    void setTransform(boolean transform) {
+       m_StoreMode.transform =transform;
+    }
+    void setSRID(String srid) {
+        m_StoreMode.SRID = srid;
+    }
+    
+    void setInter(Interleaving interl) {
+        if (interl != null) {
+            m_StoreMode.inter = interl;
+            jComboBox_Interleaving.setSelectedItem(interl.name());
+        }
+    }
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel1 = new javax.swing.JLabel();
+        jComboBox_Mode = new javax.swing.JComboBox();
+        jLabel2 = new javax.swing.JLabel();
+        jTextField_RAT = new javax.swing.JTextField();
+        jLabel_rbt = new javax.swing.JLabel();
+        jTextField_rbt = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jSpinner_RasterSize_W = new javax.swing.JSpinner();
+        jSpinner_RasterSize_H = new javax.swing.JSpinner();
+        jSpinner_RasterSize_B = new javax.swing.JSpinner();
+        jPanel2 = new javax.swing.JPanel();
+        jCheckBox_Block = new javax.swing.JCheckBox();
+        jSpinner_Block_B = new javax.swing.JSpinner();
+        jLabel_Block_B = new javax.swing.JLabel();
+        jSpinner_Block_H = new javax.swing.JSpinner();
+        jLabel_Block_H = new javax.swing.JLabel();
+        jSpinner_Block_W = new javax.swing.JSpinner();
+        jLabel_Block_W = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jSpinner_ULCcoord_X = new javax.swing.JSpinner();
+        jSpinner_ULCcoord_Y = new javax.swing.JSpinner();
+        jSpinner_ULCcoord_Z = new javax.swing.JSpinner();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jSpinner_BRPcoord_X = new javax.swing.JSpinner();
+        jSpinner_BRPcoord_Y = new javax.swing.JSpinner();
+        jSpinner_BRPcoord_Z = new javax.swing.JSpinner();
+        jLabel12 = new javax.swing.JLabel();
+        jSpinner_XMLSchemaID = new javax.swing.JSpinner();
+        jLabel21 = new javax.swing.JLabel();
+        jComboBox_Compression = new javax.swing.JComboBox();
+        jLabel22 = new javax.swing.JLabel();
+        jSpinner_quality = new javax.swing.JSpinner();
+        jLabel23 = new javax.swing.JLabel();
+        jComboBox_Interleaving = new javax.swing.JComboBox();
+        jCheckBox_LinkExist = new javax.swing.JCheckBox();
+        jLabel_Format = new javax.swing.JLabel();
+        jComboBox_Format = new javax.swing.JComboBox();
+        jLabel3 = new javax.swing.JLabel();
+        jComboBox_CellType = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
+        jSpinner_PyramidLevel = new javax.swing.JSpinner();
+
+        jLabel1.setText("存储模式");
+
+        jComboBox_Mode.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "inline", "outline", "gateway" }));
+        jComboBox_Mode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox_ModeActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("栅格属性表表名");
+
+        jTextField_RAT.setText("world");
+        jTextField_RAT.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField_RATFocusLost(evt);
+            }
+        });
+
+        jLabel_rbt.setText("栅格分块表（B表）表名");
+
+        jTextField_rbt.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextField_rbtFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField_rbtFocusLost(evt);
+            }
+        });
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("栅格大小"));
+        jPanel1.setPreferredSize(new java.awt.Dimension(140, 120));
+
+        jLabel5.setText("宽");
+
+        jLabel6.setText("高");
+
+        jLabel7.setText("波段");
+
+        jSpinner_RasterSize_W.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(256), Integer.valueOf(0), null, Integer.valueOf(1)));
+
+        jSpinner_RasterSize_H.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(256), Integer.valueOf(0), null, Integer.valueOf(1)));
+
+        jSpinner_RasterSize_B.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(3), Integer.valueOf(1), null, Integer.valueOf(1)));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSpinner_RasterSize_H, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSpinner_RasterSize_B, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSpinner_RasterSize_W, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE))
+                .addGap(12, 12, 12))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jSpinner_RasterSize_W, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jSpinner_RasterSize_H, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jSpinner_RasterSize_B, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 15, Short.MAX_VALUE))
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("分块大小"));
+
+        jCheckBox_Block.setSelected(true);
+        jCheckBox_Block.setText("是否分块");
+        jCheckBox_Block.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox_BlockActionPerformed(evt);
+            }
+        });
+
+        jSpinner_Block_B.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(3), Integer.valueOf(1), null, Integer.valueOf(1)));
+
+        jLabel_Block_B.setText("波段");
+
+        jSpinner_Block_H.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(512), Integer.valueOf(0), null, Integer.valueOf(1)));
+
+        jLabel_Block_H.setText("高");
+
+        jSpinner_Block_W.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(512), Integer.valueOf(0), null, Integer.valueOf(1)));
+
+        jLabel_Block_W.setText("宽");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jCheckBox_Block, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                        .addContainerGap(27, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel_Block_B)
+                            .addComponent(jLabel_Block_W)
+                            .addComponent(jLabel_Block_H))
+                        .addGap(16, 16, 16)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jSpinner_Block_H, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jSpinner_Block_B, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jSpinner_Block_W, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jCheckBox_Block, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel_Block_W)
+                    .addComponent(jSpinner_Block_W, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel_Block_H)
+                    .addComponent(jSpinner_Block_H, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel_Block_B)
+                    .addComponent(jSpinner_Block_B, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("ULC坐标值"));
+        jPanel3.setPreferredSize(new java.awt.Dimension(140, 120));
+
+        jLabel14.setText("X");
+
+        jLabel15.setText("Y");
+
+        jLabel16.setText("Z");
+
+        jSpinner_ULCcoord_X.setModel(new javax.swing.SpinnerNumberModel());
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15)
+                    .addComponent(jLabel16))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSpinner_ULCcoord_Y, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                    .addComponent(jSpinner_ULCcoord_Z)
+                    .addComponent(jSpinner_ULCcoord_X))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(jSpinner_ULCcoord_X, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(jSpinner_ULCcoord_Y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel16)
+                    .addComponent(jSpinner_ULCcoord_Z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("BRP坐标值"));
+
+        jLabel18.setText("X");
+
+        jLabel19.setText("Y");
+
+        jLabel20.setText("Z");
+
+        jSpinner_BRPcoord_X.setModel(new javax.swing.SpinnerNumberModel());
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel20)
+                    .addComponent(jLabel18)
+                    .addComponent(jLabel19))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSpinner_BRPcoord_Z, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSpinner_BRPcoord_X, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+                    .addComponent(jSpinner_BRPcoord_Y))
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel18)
+                    .addComponent(jSpinner_BRPcoord_X, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel19)
+                    .addComponent(jSpinner_BRPcoord_Y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel20)
+                    .addComponent(jSpinner_BRPcoord_Z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        jLabel12.setText("XML方案号");
+
+        jSpinner_XMLSchemaID.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+
+        jLabel21.setText("压缩类型");
+
+        jComboBox_Compression.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "NONE", "JPEG", "ZLIB" }));
+
+        jLabel22.setText("压缩质量");
+
+        jSpinner_quality.setModel(new javax.swing.SpinnerNumberModel(75, 1, 100, 1));
+
+        jLabel23.setText("像元交错类型");
+
+        jComboBox_Interleaving.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "BIP", "BSQ", "BIL" }));
+        jComboBox_Interleaving.setSelectedIndex(1);
+
+        jCheckBox_LinkExist.setText("外部链接");
+        jCheckBox_LinkExist.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox_LinkExistActionPerformed(evt);
+            }
+        });
+
+        jLabel_Format.setText("外部数据源格式");
+        jLabel_Format.setEnabled(false);
+
+        jComboBox_Format.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "BMP", "ENVI", "GEORASTER", "GIF", "GTiff", "HFA", "JPEG", "SDE" }));
+        jComboBox_Format.setEnabled(false);
+
+        jLabel3.setText("像元类型");
+
+        jComboBox_CellType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1BB", "2BUI", "4BUI", "8BUI", "8BSI", "16BUI", "16BSI", "32BUI", "32BSI", "32BF", "64BF" }));
+        jComboBox_CellType.setSelectedIndex(3);
+
+        jLabel4.setText("金字塔级别");
+
+        jSpinner_PyramidLevel.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(6), Integer.valueOf(0), null, Integer.valueOf(1)));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(74, 74, 74)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel22)
+                                    .addComponent(jLabel21))
+                                .addGap(6, 6, 6)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jSpinner_quality)
+                                    .addComponent(jComboBox_Compression, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(41, 41, 41))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(37, 37, 37)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(4, 4, 4))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jTextField_RAT, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel1)
+                                .addGap(25, 25, 25)
+                                .addComponent(jComboBox_Mode, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSpinner_XMLSchemaID, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(42, 42, 42)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jCheckBox_LinkExist)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel_Format)
+                                            .addComponent(jLabel23)
+                                            .addComponent(jLabel3))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jComboBox_CellType, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(jComboBox_Format, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jComboBox_Interleaving, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel_rbt)
+                            .addComponent(jTextField_rbt, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(209, 209, 209)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jSpinner_PyramidLevel, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25))))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(jTextField_RAT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jComboBox_Mode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel_rbt)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField_rbt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jSpinner_PyramidLevel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel4)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox_Compression, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel22)
+                            .addComponent(jSpinner_quality, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(jComboBox_CellType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(4, 4, 4)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jComboBox_Interleaving, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jCheckBox_LinkExist)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel_Format)
+                            .addComponent(jComboBox_Format, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel12)
+                            .addComponent(jSpinner_XMLSchemaID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jCheckBox_LinkExistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox_LinkExistActionPerformed
+        // TODO add your handling code here:
+        if(jCheckBox_LinkExist.isSelected())
+        {
+         jLabel_Format.setEnabled(true);
+         jComboBox_Format.setEnabled(true);
+        }
+        else
+        {
+         jLabel_Format.setEnabled(false);
+         jComboBox_Format.setEnabled(false);
+        }
+    }//GEN-LAST:event_jCheckBox_LinkExistActionPerformed
+
+    void setDataSource(DataSource dataSource) {
+         m_bydOperator = new BydOperator(new DataSourceUtils(dataSource));
+    }
+    
+    public void setStoreMode(StoreMode mode) {
+       
+        m_StoreMode = mode;
+        jTextField_rbt.setText(mode.tableBName);
+
+        jSpinner_Block_W.setValue(mode.getBlockXSize());
+        jSpinner_Block_H.setValue(mode.getBlockYSize());
+        jSpinner_Block_B.setValue(mode.getBlockBand());
+        jCheckBox_Block.setSelected(mode.blocking);
+
+        jSpinner_RasterSize_W.setValue(mode.getRasterXSize());
+        jSpinner_RasterSize_H.setValue(mode.getRasterYSize());
+        jSpinner_RasterSize_B.setValue(mode.getRasterBand());
+
+        jSpinner_ULCcoord_X.setValue(mode.getULCRow());
+        jSpinner_ULCcoord_Y.setValue(mode.getULCColumn());
+        jSpinner_ULCcoord_Z.setValue(mode.getULCBand());
+
+        jSpinner_BRPcoord_X.setValue(mode.getBRPRow());
+        jSpinner_BRPcoord_Y.setValue(mode.getBRPColumn());
+        jSpinner_BRPcoord_Z.setValue(mode.getBRPBand());
+
+        jComboBox_Interleaving.setSelectedItem(mode.inter.name());
+        jComboBox_Compression.setSelectedItem(mode.comp.name());
+      
+        jComboBox_Format.setSelectedItem(mode.formatt.name());
+        jComboBox_Mode.setSelectedItem(mode.mode.name());
+
+        String type = mode.cellType.name();
+        char[] characters = type.toCharArray();
+        int index = 0;
+        for (int i = 0; i < characters.length; i++) {
+            if (characters[i] >= 'A' && characters[i] <= 'Z') {
+                continue;
+            } else {
+                index = i;
+                break;
+            }
+        }
+        String number = type.substring(index);
+        String newCharacters = number + type.substring(0, index);
+        jComboBox_CellType.setSelectedItem(newCharacters);
+        
+        jCheckBox_LinkExist.setSelected(mode.linexistB);
+        
+        jSpinner_XMLSchemaID.setValue(mode.metaschemaId);
+        jSpinner_PyramidLevel.setValue(mode.pyd_level);
+        
+        jSpinner_quality.setValue(mode.quality);
+        
+    }
+    public  StoreMode getStoreMode() {
+        
+        StringBuilder builder = new StringBuilder();
+        m_TableAName = jTextField_RAT.getText();
+        m_StoreMode.tableBName = jTextField_rbt.getText();
+        
+        m_StoreMode.blocking = jCheckBox_Block.isSelected();
+
+        builder.append("(").append(jSpinner_RasterSize_W.getValue().toString()).append(",")
+        .append(jSpinner_RasterSize_H.getValue().toString()).append(",")
+        .append(jSpinner_RasterSize_B.getValue().toString()).append(")");
+
+        m_StoreMode.rastersize = builder.toString();
+
+        builder.delete(0, builder.length());
+        builder.append("(").append(jSpinner_Block_W.getValue().toString()).append(",")
+                .append(jSpinner_Block_H.getValue().toString()).append(",")
+                .append(jSpinner_Block_B.getValue().toString()).append(")");
+        m_StoreMode.blocksize = builder.toString();
+
+        builder.delete(0, builder.length());
+        builder.append("(").append(jSpinner_ULCcoord_X.getValue().toString()).append(",")
+                .append(jSpinner_ULCcoord_Y.getValue().toString()).append(",")
+                .append(jSpinner_ULCcoord_Z.getValue().toString()).append(")");
+        m_StoreMode.ulccoord = builder.toString();
+
+        builder.delete(0, builder.length());
+        builder.append("(").append(jSpinner_BRPcoord_X.getValue().toString()).append(",")
+                .append(jSpinner_BRPcoord_Y.getValue().toString()).append(",")
+                .append(jSpinner_BRPcoord_Z.getValue().toString()).append(")");
+        m_StoreMode.brpcoord = builder.toString();
+
+        m_StoreMode.inter = Interleaving.valueOf(jComboBox_Interleaving.getSelectedItem().toString());
+
+        m_StoreMode.comp = Compression.valueOf(jComboBox_Compression.getSelectedItem().toString());
+        m_StoreMode.formatt = RasterFormat.valueOf(jComboBox_Format.getSelectedItem().toString());
+        m_StoreMode.mode = RasterMode.valueOf(jComboBox_Mode.getSelectedItem().toString());
+
+        String type = jComboBox_CellType.getSelectedItem().toString();
+        char[] characters = type.toCharArray();
+        int index=0;
+        for (int i = 0; i < characters.length; i++) {
+            if (characters[i]>='1'&&characters[i]<='9' ){
+                continue;
+            }else
+            {
+                index=i;break;
+            }
+        }
+         String letters= type.substring(index);
+       String newCharacters = letters+type.substring(0,index);
+        m_StoreMode.cellType = Celltype.valueOf(newCharacters);
+        
+        m_StoreMode.linexistB = jCheckBox_LinkExist.isSelected();
+        m_StoreMode.metaschemaId = Integer.parseInt(jSpinner_XMLSchemaID.getValue().toString());
+
+        m_StoreMode.pyd_level =  Integer.parseInt( jSpinner_PyramidLevel.getValue().toString());
+        m_StoreMode.quality= Integer.parseInt(jSpinner_quality.getValue().toString());
+        return m_StoreMode;
+    }
+    
+    public  String  getTableAName() {
+        m_TableAName = jTextField_RAT.getText();
+       return  m_TableAName;
+    }
+
+
+
+     
+    private void jComboBox_ModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_ModeActionPerformed
+        // TODO add your handling code here:
+          if(jComboBox_Mode.getSelectedItem().toString().equals(RasterMode.inline.name()))
+          {
+             jLabel_rbt.setVisible(true);
+             jTextField_rbt.setVisible(true);
+             jLabel_rbt.setText("栅格分块表（B表）表名");
+             jCheckBox_LinkExist.setEnabled(false);
+          }
+           else if(jComboBox_Mode.getSelectedItem().toString().equals(RasterMode.outline.name()))
+          {
+              //不指定路径，而是直接采用分块树目录名时，分块树存储路径为数据库的data 目录下
+         
+             jLabel_rbt.setVisible(true);
+             jTextField_rbt.setVisible(true);
+             jTextField_rbt.setEnabled(true);
+             jLabel_rbt.setText("栅格分块树（B树）在目标数据库存储路径\n（默认数据库Data目录下）");
+             jCheckBox_LinkExist.setEnabled(false);
+              
+          }
+           else  if(jComboBox_Mode.getSelectedItem().toString().equals(RasterMode.gateway.name()))
+          {
+              //使用当前路径作为外部数据源
+             jLabel_rbt.setVisible(false);
+             jTextField_rbt.setVisible(false);
+             jCheckBox_LinkExist.setEnabled(true);
+          }
+    }//GEN-LAST:event_jComboBox_ModeActionPerformed
+
+    private void jCheckBox_BlockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox_BlockActionPerformed
+        // TODO add your handling code here:
+        if (jCheckBox_Block.isSelected()) {
+            jLabel_Block_B.setEnabled(true);
+            jLabel_Block_H.setEnabled(true);
+            jLabel_Block_W.setEnabled(true);
+            jSpinner_Block_B.setEnabled(true);
+            jSpinner_Block_H.setEnabled(true);
+            jSpinner_Block_W.setEnabled(true);
+        } else {
+             jLabel_Block_B.setEnabled(false);
+            jLabel_Block_H.setEnabled(false);
+            jLabel_Block_W.setEnabled(false);
+            jSpinner_Block_B.setEnabled(false);
+            jSpinner_Block_H.setEnabled(false);
+            jSpinner_Block_W.setEnabled(false);
+        }
+    }//GEN-LAST:event_jCheckBox_BlockActionPerformed
+
+    private void jTextField_rbtFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField_rbtFocusLost
+        // TODO add your handling code here:
+         tips4TableName();
+    }//GEN-LAST:event_jTextField_rbtFocusLost
+
+    private void  tips4TableName()
+    {
+          if( jTextField_RAT.getText().isEmpty()|| jTextField_rbt.getText().isEmpty())
+        {
+            //提示不能为空
+            JOptionPane.showMessageDialog(this,"栅格属性表和分块表或分块树名称不能为空"); 
+            jTextField_rbt.setText(m_StoreMode.tableBName);
+        }
+    }
+    private void jTextField_RATFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField_RATFocusLost
+        // TODO add your handling code here:
+        if (jTextField_rbt.getText().isEmpty()) {
+            m_TableAName =jTextField_RAT.getText();
+            jTextField_rbt.setText(m_TableAName+"_rbt");
+        }
+        tips4TableName();
+    }//GEN-LAST:event_jTextField_RATFocusLost
+
+    private void jTextField_rbtFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField_rbtFocusGained
+        // TODO add your handling code here:
+             m_TableAName = jTextField_RAT.getText();
+            auotFileTableBName();
+    }//GEN-LAST:event_jTextField_rbtFocusGained
+
+  
+    
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox jCheckBox_Block;
+    private javax.swing.JCheckBox jCheckBox_LinkExist;
+    private javax.swing.JComboBox jComboBox_CellType;
+    private javax.swing.JComboBox jComboBox_Compression;
+    private javax.swing.JComboBox jComboBox_Format;
+    private javax.swing.JComboBox jComboBox_Interleaving;
+    private javax.swing.JComboBox jComboBox_Mode;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel_Block_B;
+    private javax.swing.JLabel jLabel_Block_H;
+    private javax.swing.JLabel jLabel_Block_W;
+    private javax.swing.JLabel jLabel_Format;
+    private javax.swing.JLabel jLabel_rbt;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JSpinner jSpinner_BRPcoord_X;
+    private javax.swing.JSpinner jSpinner_BRPcoord_Y;
+    private javax.swing.JSpinner jSpinner_BRPcoord_Z;
+    private javax.swing.JSpinner jSpinner_Block_B;
+    private javax.swing.JSpinner jSpinner_Block_H;
+    private javax.swing.JSpinner jSpinner_Block_W;
+    private javax.swing.JSpinner jSpinner_PyramidLevel;
+    private javax.swing.JSpinner jSpinner_RasterSize_B;
+    private javax.swing.JSpinner jSpinner_RasterSize_H;
+    private javax.swing.JSpinner jSpinner_RasterSize_W;
+    private javax.swing.JSpinner jSpinner_ULCcoord_X;
+    private javax.swing.JSpinner jSpinner_ULCcoord_Y;
+    private javax.swing.JSpinner jSpinner_ULCcoord_Z;
+    private javax.swing.JSpinner jSpinner_XMLSchemaID;
+    private javax.swing.JSpinner jSpinner_quality;
+    private javax.swing.JTextField jTextField_RAT;
+    private javax.swing.JTextField jTextField_rbt;
+    // End of variables declaration//GEN-END:variables
+
+    
+
+
+}
+
